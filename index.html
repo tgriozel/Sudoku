@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Sudoku</title>
+    </head>
+    <body>
+        <div id='matrix'></div>
+        <br>
+        <div id='player_count'></div>
+        <br>
+        <div id='game_status'></div>
+        <br>
+        <input type="submit" value="Reset" onclick="return resetGame();" />
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var matrix = new Array(9);
+            for (i = 0; i < 9; ++i)
+                matrix[i] = new Array(9);
+            var revealed_matrix = new Array(9);
+            for (i = 0; i < 9; ++i)
+                revealed_matrix[i] = new Array(9);
+
+            var socket = io('http://localhost:8000');
+            socket.on('initial', function (startMatrix, revealedMatrix) {
+                matrix = startMatrix;
+                revealed_matrix = revealedMatrix;
+                updateMatrix();
+                console.log(revealed_matrix);
+            });
+            socket.on('update_cell', function (changedRow, changedCol, value) {
+                matrix[changedRow][changedCol] = value;
+                updateMatrix();
+            });
+            socket.on('update_player_count', function (count) {
+                document.getElementById('player_count').innerHTML = 'Players: ' + count;
+            });
+            socket.on('completed', function () {
+                document.getElementById('game_status').innerHTML = 'Sudoku successfully completed!';
+            });
+
+            resetGame = function () {
+                socket.emit('reset');
+                document.getElementById('game_status').innerHTML = '';
+            }
+
+            changeValue = function (cell, row, col) {
+                socket.emit('input', row, col, cell.value);
+            }
+
+            updateMatrix = function() {
+                var htmlMatrix = '<table>';
+                for(row = 0; row < 9; ++row) {
+                    htmlMatrix += '<tr>';
+                    for(col = 0; col < 9; ++col) {
+                        htmlMatrix += '<td><select ';
+                        if (revealed_matrix[row][col] != 0) {
+                            htmlMatrix += 'disabled="true">';
+                            htmlMatrix += '<option selected="selected">' + revealed_matrix[row][col] + '</option>';
+                        }
+                        else {
+                            htmlMatrix += 'onchange="changeValue(this, ' + row + ',' + col + ');">';
+                            htmlMatrix += '<option value="blank"> </option>';
+                            for (i = 1; i <= 9; ++i) {
+                                var selected = '';
+                                if (matrix[row][col] == i)
+                                    selected = 'selected="selected"';
+                                htmlMatrix += '<option '+ selected + ' value="' + i + '">' + i + '</option>';
+                            }
+                        }
+                        htmlMatrix += '</select></td>';
+                    }
+                    htmlMatrix += '</tr>';
+                }
+                htmlMatrix += '</table>';
+                document.getElementById('matrix').innerHTML = htmlMatrix;
+            }
+        </script>
+    </body>
+</html>
