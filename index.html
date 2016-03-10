@@ -9,7 +9,7 @@
         <br>
         <div id='game_status'></div>
         <br>
-        <input type="submit" value="Reset" onclick="return resetGame();" />
+        <input type="submit" value="New game" onclick="return requestNewGame();" />
         <script src="/socket.io/socket.io.js"></script>
         <script>
             var matrix = [], revealed_matrix = [];
@@ -30,8 +30,8 @@
                 document.getElementById('game_status').innerHTML = 'Sudoku successfully completed!';
             });
 
-            resetGame = function () {
-                socket.emit('reset');
+            requestNewGame = function () {
+                socket.emit('new_game');
                 document.getElementById('game_status').innerHTML = '';
             }
 

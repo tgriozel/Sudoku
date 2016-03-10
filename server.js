@@ -51,7 +51,7 @@ io.on('connection', function (socket) {
 		if (sudoku.verify_matrix_equality(matrix, solution))
 			io.emit('completed');
 	});
-	socket.on('reset', function () {
+	socket.on('new_game', function () {
 		initializeData();
 		socket.emit('initial', matrix, revealed_matrix);
 	});
