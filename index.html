@@ -12,19 +12,12 @@
         <input type="submit" value="Reset" onclick="return resetGame();" />
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            var matrix = new Array(9);
-            for (i = 0; i < 9; ++i)
-                matrix[i] = new Array(9);
-            var revealed_matrix = new Array(9);
-            for (i = 0; i < 9; ++i)
-                revealed_matrix[i] = new Array(9);
-
+            var matrix = [], revealed_matrix = [];
             var socket = io('http://localhost:8000');
             socket.on('initial', function (startMatrix, revealedMatrix) {
                 matrix = startMatrix;
                 revealed_matrix = revealedMatrix;
                 updateMatrix();
-                console.log(revealed_matrix);
             });
             socket.on('update_cell', function (changedRow, changedCol, value) {
                 matrix[changedRow][changedCol] = value;
@@ -52,7 +45,7 @@
                     htmlMatrix += '<tr>';
                     for(col = 0; col < 9; ++col) {
                         htmlMatrix += '<td><select ';
-                        if (revealed_matrix[row][col] != 0) {
+                        if (revealed_matrix[row][col] != null) {
                             htmlMatrix += 'disabled="true">';
                             htmlMatrix += '<option selected="selected">' + revealed_matrix[row][col] + '</option>';
                         }

@@ -21,25 +21,22 @@ getRandomNumber = function (min, max) {
 }
 
 initializeData = function () {
-	for (i = 0; i < 9; ++i)
-	    matrix[i] = [];
-
-	for (i = 0; i < 9; ++i) {
-		revealed_matrix[i] = [];
-		for (j = 0; j < 9; ++j)
-			revealed_matrix[i][j] = 0;
-	}
-
 	solution = sudoku.generate_sudoku();
+
+  for (i = 0; i < 9; ++i)
+    revealed_matrix[i] = [];
 
 	for (i = 0; i < revealed_cells_count; ++i) {
 		var row = getRandomNumber(0, 8);
 		var col = getRandomNumber(0, 8);
-		if (revealed_matrix[row][col] == 0)
+		if (revealed_matrix[row][col] == null)
 			revealed_matrix[row][col] = solution[row][col];
 		else
 			--i;
 	}
+
+  for (i = 0; i < 9; ++i)
+    matrix[i] = revealed_matrix[i].slice();
 }
 
 initializeData();
