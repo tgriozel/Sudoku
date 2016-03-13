@@ -1,0 +1,20 @@
+select {
+  margin: 2px;
+  padding: 10px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+tr:nth-child(3n):nth-child(-n+6) {
+  border-bottom : 2px solid #000;
+}
+
+td:nth-child(3n):nth-child(-n+6) {
+  border-right: 2px solid #000;
+}
