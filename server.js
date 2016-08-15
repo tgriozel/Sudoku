@@ -1,4 +1,5 @@
 var express = require('express');
+
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -20,21 +21,21 @@ getRandomNumber = function (min, max) {
 }
 
 initializeData = function () {
-	solution = sudoku.generate_sudoku();
+    solution = sudoku.generate_sudoku();
 
-  for (i = 0; i < 9; ++i)
-    revealed_matrix[i] = [];
+    for (i = 0; i < 9; ++i)
+        revealed_matrix[i] = [];
 
-	for (i = 0; i < revealed_cells_count; ++i) {
-		var row = getRandomNumber(0, 8);
-		var col = getRandomNumber(0, 8);
-		if (revealed_matrix[row][col] == null)
-			revealed_matrix[row][col] = solution[row][col];
-		else
-			--i;
-	}
+    for (i = 0; i < revealed_cells_count; ++i) {
+        var row = getRandomNumber(0, 8);
+        var col = getRandomNumber(0, 8);
+        if (revealed_matrix[row][col] == null)
+            revealed_matrix[row][col] = solution[row][col];
+        else
+            --i;
+    }
 
-  for (i = 0; i < 9; ++i)
+    for (i = 0; i < 9; ++i)
     matrix[i] = revealed_matrix[i].slice();
 }
 
@@ -52,7 +53,7 @@ io.on('connection', function (socket) {
 	});
 	socket.on('new_game', function () {
 		initializeData();
-		socket.emit('initial', matrix, revealed_matrix);
+		io.emit('initial', matrix, revealed_matrix);
 	});
 	socket.on('disconnect', function () {
 		io.emit('update_player_count', --player_count);

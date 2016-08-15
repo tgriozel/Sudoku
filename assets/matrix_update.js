@@ -6,6 +6,7 @@ gameInit = function () {
     socket.on('initial', function (startMatrix, revealedMatrix) {
         matrix = startMatrix;
         revealed_matrix = revealedMatrix;
+        document.getElementById('game_status').innerHTML = '';
         updateMatrix();
     });
 
@@ -25,25 +26,24 @@ gameInit = function () {
 
 requestNewGame = function () {
     socket.emit('new_game');
-    document.getElementById('game_status').innerHTML = '';
 }
 
-changeValue = function (cell, row, col) {
+changeCellValue = function (cell, row, col) {
     socket.emit('input', row, col, cell.value);
 }
 
 updateMatrix = function() {
     var htmlMatrix = '<table>';
-    for(row = 0; row < 9; ++row) {
+    for (row = 0; row < 9; ++row) {
         htmlMatrix += '<tr>';
-        for(col = 0; col < 9; ++col) {
+        for (col = 0; col < 9; ++col) {
             htmlMatrix += '<td><select ';
             if (revealed_matrix[row][col] != null) {
                 htmlMatrix += 'disabled="true">';
                 htmlMatrix += '<option selected="selected">' + revealed_matrix[row][col] + '</option>';
             }
             else {
-                htmlMatrix += 'onchange="changeValue(this, ' + row + ',' + col + ');">';
+                htmlMatrix += 'onchange="changeCellValue(this, ' + row + ',' + col + ');">';
                 htmlMatrix += '<option value="blank"> </option>';
                 for (i = 1; i <= 9; ++i) {
                     var selected = '';
