@@ -2,12 +2,9 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var sudoku = require('./sudoku.js');
+var sudoku = require('./lib/sudoku.js');
 
-app.get('/', function (req, res) {
-  app.use(express.static(__dirname, + '/style.css'));
-  res.sendFile( __dirname + '/index.html');
-});
+app.use('/', express.static(__dirname + '/assets'));
 
 // Difficulty setting, how many cells will be revealed from the start
 const revealed_cells_count = 18;
@@ -62,5 +59,5 @@ io.on('connection', function (socket) {
 	});
 });
 
-// listen on port 8000
+// Listen on port 8000
 http.listen(8000);

@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="matrix_update.js"></script>
+        <link href="style.css" rel="stylesheet" type="text/css"/>
+        <title>Sudoku</title>
+    </head>
+    <body>
+        <script>gameInit();</script>
+        <div id='matrix'></div>
+        <br>
+        <div id='player_count'></div>
+        <br>
+        <div id='game_status'></div>
+        <br>
+        <input type="submit" value="New game" onclick="return requestNewGame();" />
+    </body>
+</html>
