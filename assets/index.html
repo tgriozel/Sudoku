@@ -1,18 +1,32 @@
 <html>
     <head>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="matrix_update.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.0.0/lodash.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script src="matrix_controller.js"></script>
+        <script src="socket_service.js"></script>
         <link href="style.css" rel="stylesheet" type="text/css"/>
         <title>Sudoku</title>
     </head>
-    <body>
-        <script>gameInit();</script>
-        <div id='matrix'></div>
+    <body ng-app="sudoku-app" ng-controller="MatrixController">
+        <div id="grid">
+            <table>
+                 <tr ng-repeat="i in _.range(0, 9)">
+                    <td ng-repeat="j in _.range(0, 9)">
+                        <select
+                            ng-model="matrix[i][j]"
+                            ng-options="value for value in _.range(1, 10)"
+                            ng-change="changeCellValue(i, j)">
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <br>
-        <div id='player_count'></div>
+        <div id='player_count'>Current players: {{playerCount}}</div>
         <br>
-        <div id='game_status'></div>
+        <div id='game_status'>{{gameCompleted ? "Sudoku successfully completed!" : ""}}</div>
         <br>
-        <input type="submit" value="New game" onclick="return requestNewGame();" />
+        <input type="submit" value="New game" ng-click="requestNewGame()"/>
     </body>
 </html>

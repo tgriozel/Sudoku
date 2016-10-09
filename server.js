@@ -36,7 +36,7 @@ initializeData = function () {
     }
 
     for (i = 0; i < 9; ++i)
-    matrix[i] = revealed_matrix[i].slice();
+        matrix[i] = revealed_matrix[i].slice();
 }
 
 initializeData();
@@ -45,9 +45,9 @@ initializeData();
 io.on('connection', function (socket) {
 	socket.emit('initial', matrix, revealed_matrix);
 	io.emit('update_player_count', ++player_count);
-	socket.on('input', function (row, col, value) {
-		matrix[row][col] = value;
-		io.emit('update_cell', row, col, matrix[row][col]);
+	socket.on('input', function (update) {
+		matrix[update.row][update.col] = update.value;
+		io.emit('update_cell', update);
 		if (sudoku.verify_matrix_equality(matrix, solution))
 			io.emit('completed');
 	});
